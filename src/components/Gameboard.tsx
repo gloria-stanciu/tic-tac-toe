@@ -4,6 +4,7 @@ import Button from "./Button";
 export default function Gameboard(props: { size: number }) {
   const [board, setBoard] = useState<Array<Array<string>>>([[]]);
   const [player, setPlayer] = useState(false); //false is first player and true is second player
+  // const [isEqual, setIsEqual] = useState<Boolean | undefined>()
 
   function CreateBoard() {
     const newBoard = Array(props.size).fill(new Array(props.size).fill(""));
@@ -30,6 +31,21 @@ export default function Gameboard(props: { size: number }) {
     });
   }
 
+  function CheckForWin(){
+    let isEqual;
+    for(let i=0; i<board.length; i++){
+      isEqual = true;
+      for(let j=0; j<board.length-1; j++){
+        if(board[i][j] !== board[i][j+1])
+        {
+          isEqual = false;
+        }
+      }
+      if(isEqual) return isEqual
+    }
+    return false
+  }
+
   function ResetGame(){
     setBoard((prevState) => {
       const newMatrix = prevState.map((arr, idR) => {
@@ -48,6 +64,11 @@ export default function Gameboard(props: { size: number }) {
   useEffect(() => {
     CreateBoard();
   }, []);
+
+  useEffect(() => {
+    const res = CheckForWin();
+    console.log(res)
+  }, [player]);
 
   return (
     <div className="w-screen flex flex-col justify-center items-center">
