@@ -1,24 +1,28 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import logo from "./logo.svg";
+import "./App.css";
+import Gameboard from "./components/Gameboard";
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1
+        className="text-lg text-slate-800 my-8
+      sm:text-xl
+      md:text-2xl
+      lg:text-3xl
+      xl:text-4xl
+      "
+      >
+        Let's play tic-tac-toe!
+      </h1>
+      <Gameboard size={3} />
+      <button
+        className="bg-white py-4 px-6 rounded-md
+      hover:bg-slate-300 hover:font-medium "
+      >
+        Restart game
+      </button>
     </div>
   );
 }
