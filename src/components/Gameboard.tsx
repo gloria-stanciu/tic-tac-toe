@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
 import Button from "./Button";
+import JSConfetti from 'js-confetti'
 
 export default function Gameboard(props: { size: number }) {
   
+  
+const jsConfetti = new JSConfetti()
   const [board, setBoard] = useState<Array<Array<string>>>([[]]);
   const [player, setPlayer] = useState(false); //false is first player and true is second player
   const [gameWon, setGameWon] = useState<boolean>(false);
@@ -14,6 +17,7 @@ export default function Gameboard(props: { size: number }) {
   }
 
   function AddValue(idRow: number, idCol: number) {
+    if(gameWon) return
     let value = "";
     if (player) value = "0";
     else value = "X";
@@ -122,7 +126,9 @@ export default function Gameboard(props: { size: number }) {
   }, [valuePos]);
 
   useEffect(()=>{
-    console.log("am castigaat")
+    if(gameWon){
+      jsConfetti.addConfetti()
+    }
   }, [gameWon])
 
   return (
@@ -142,7 +148,8 @@ export default function Gameboard(props: { size: number }) {
       ))}
       <button
         type="reset"
-        className="bg-white font-medium text-gray-500 border-2 border-slate-300 py-4 px-6 rounded-md outline-none mt-8
+        className="bg-white text-sm font-medium text-gray-500 border-2 border-slate-300 py-2 px-4 rounded-md outline-none mt-4
+        md:py-4 md:px-6 md:mt-8 md:font-medium md:text-base
       hover:bg-slate-300 hover:text-gray-900"
         onClick={ResetGame}
       >
