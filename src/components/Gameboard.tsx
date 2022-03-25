@@ -1,14 +1,12 @@
 import { useEffect, useState } from "react";
 import Button from "./Button";
-import JSConfetti from 'js-confetti'
+import JSConfetti from "js-confetti";
 
 export default function Gameboard(props: { size: number }) {
-  
-  
-const jsConfetti = new JSConfetti()
+  const jsConfetti = new JSConfetti();
   const [board, setBoard] = useState<Array<Array<string>>>([[]]);
   const [player, setPlayer] = useState(false); //false is first player and true is second player
-  const [gameWon, setGameWon] = useState<boolean>(false);
+  const [gameWon, setGameWon] = useState<"X" | "0" | undefined>();
   const [valuePos, setValuePos] = useState<[number, number]>();
 
   function CreateBoard() {
@@ -17,7 +15,7 @@ const jsConfetti = new JSConfetti()
   }
 
   function AddValue(idRow: number, idCol: number) {
-    if(gameWon) return
+    if (gameWon) return;
     let value = "";
     if (player) value = "0";
     else value = "X";
@@ -49,8 +47,8 @@ const jsConfetti = new JSConfetti()
         numberOf0++;
       }
     }
-    if (numberOf0 === board.length || numberOfX === board.length)
-      setGameWon(true);
+    if (numberOf0 === board.length) setGameWon("0");
+    else if (numberOfX === board.length) setGameWon("X");
   }
 
   function CheckColumn(colId: number) {
@@ -63,8 +61,8 @@ const jsConfetti = new JSConfetti()
         numberOf0++;
       }
     }
-    if (numberOf0 === board.length || numberOfX === board.length)
-      setGameWon(true);
+    if (numberOf0 === board.length) setGameWon("0");
+    else if (numberOfX === board.length) setGameWon("X");
   }
 
   function CheckPrimaryDiagonal() {
@@ -77,8 +75,8 @@ const jsConfetti = new JSConfetti()
         numberOf0++;
       }
     }
-    if (numberOf0 === board.length || numberOfX === board.length)
-      setGameWon(true);
+    if (numberOf0 === board.length) setGameWon("0");
+    else if (numberOfX === board.length) setGameWon("X");
   }
 
   function CheckSecondaryDiagonal() {
@@ -91,12 +89,12 @@ const jsConfetti = new JSConfetti()
         numberOf0++;
       }
     }
-    if (numberOf0 === board.length || numberOfX === board.length)
-      setGameWon(true);
+    if (numberOf0 === board.length) setGameWon("0");
+    else if (numberOfX === board.length) setGameWon("X");
   }
 
   function CheckForWin(row: number, column: number) {
-    CheckLine(row)
+    CheckLine(row);
     CheckColumn(column);
     CheckPrimaryDiagonal();
     CheckSecondaryDiagonal();
@@ -114,7 +112,7 @@ const jsConfetti = new JSConfetti()
       return newMatrix;
     });
     setPlayer(false);
-    setGameWon(false)
+    setGameWon(undefined);
   }
 
   useEffect(() => {
@@ -125,20 +123,22 @@ const jsConfetti = new JSConfetti()
     if (valuePos) CheckForWin(valuePos?.[0], valuePos?.[1]);
   }, [valuePos]);
 
-  useEffect(()=>{
-    if(gameWon){
-      jsConfetti.addConfetti()
+  useEffect(() => {
+    if (gameWon) {
+      jsConfetti.addConfetti();
     }
-  }, [gameWon])
+  }, [gameWon]);
 
   return (
     <div className="w-screen flex flex-col justify-center items-center">
-      {gameWon? <p> You won!</p>: null}
+      {gameWon ? (
+        <p className="font-semibold text-slate-600 m-2"> {gameWon} won!</p>
+      ) : null}
       {board?.map((row, idR) => (
         <div key={idR} className="flex flex-row items-center justify-center">
           {row.map((item, idC) => (
             <Button
-              gameWon = {gameWon}
+              gameWon={gameWon}
               key={idR.toString() + idC.toString()}
               value={item}
               onClick={() => AddValue(idR, idC)}

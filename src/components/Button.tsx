@@ -1,5 +1,5 @@
 export default function Button(props: {
-  gameWon: boolean,
+  gameWon: "X" | "0" | undefined;
   value: string;
   onClick: React.MouseEventHandler<HTMLButtonElement>;
 }) {
@@ -10,7 +10,7 @@ export default function Button(props: {
       md:w-36 md:text-6xl
       lg:w-40 lg:text-3xl
       xl:w-48 xl:text-4xl
-       ${props.gameWon? "cursor-not-allowed" : ""}`}
+       ${props.gameWon ? "cursor-not-allowed" : ""}`}
       onClick={props.onClick}
     >
       {props.value}
