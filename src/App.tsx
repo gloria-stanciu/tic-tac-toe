@@ -5,7 +5,7 @@ import Gameboard from "./components/Gameboard";
 
 function App() {
   return (
-    <div className="w-screen h-screen flex flex-col justify-evenly items-center">
+    <div id='App' className="w-screen h-screen flex flex-col justify-evenly items-center">
       <h1
         className="text-lg text-slate-800 my-8
       sm:text-xl

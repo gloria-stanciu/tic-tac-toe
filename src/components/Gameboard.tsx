@@ -2,28 +2,23 @@ import { useEffect, useState } from "react";
 import Button from "./Button";
 
 export default function Gameboard(props: { size: number }) {
+  
   const [board, setBoard] = useState<Array<Array<string>>>([[]]);
   const [player, setPlayer] = useState(false); //false is first player and true is second player
-  const [gameWon, setGameWon] = useState<Boolean>(false)
-  const [valuePos, setValuePos] = useState<[number, number]>()
+  const [gameWon, setGameWon] = useState<boolean>(false);
+  const [valuePos, setValuePos] = useState<[number, number]>();
 
   function CreateBoard() {
     const newBoard = Array(props.size).fill(new Array(props.size).fill(""));
     setBoard(newBoard);
   }
 
-  function UpdateGame(idRow: number, idCol: number){
-    AddValue(idRow, idCol)
-    CheckLine(idRow)
-    // CheckForWin(idRow, idCol)
-  }
-
   function AddValue(idRow: number, idCol: number) {
     let value = "";
     if (player) value = "0";
     else value = "X";
-    
-    setValuePos([idRow, idCol])
+
+    setValuePos([idRow, idCol]);
     setBoard((prevState) => {
       const newMatrix = prevState.map((arr, idR) => {
         const newRow = arr.map((item, idC) => {
@@ -37,47 +32,70 @@ export default function Gameboard(props: { size: number }) {
       });
       return newMatrix;
     });
-
   }
 
-  function CheckLine(rowId: number){
+  function CheckLine(rowId: number) {
     let numberOfX = 0;
     let numberOf0 = 0;
-    for(let i=0; i<board.length; i++){
-      if(board[rowId][i].toString() === 'X'){
-        numberOfX ++;
-        console.log(numberOfX)
-      }else if(board[rowId][i].toString() === '0'){
+
+    for (let i = 0; i < board.length; i++) {
+      if (board[rowId][i] === "X") {
+        numberOfX++;
+      } else if (board[rowId][i] === "0") {
         numberOf0++;
-        console.log(numberOf0)
       }
     }
     if (numberOf0 === board.length || numberOfX === board.length)
-      setGameWon(true)
+      setGameWon(true);
   }
 
-  function CheckColumn(colId: number){
+  function CheckColumn(colId: number) {
     let numberOfX = 0;
     let numberOf0 = 0;
-    for(let i=0; i<board.length; i++){
-      if(board[i][colId].toString() === 'X'){
-        numberOfX ++;
-        console.log(numberOfX)
-      }else if(board[i][colId].toString() === '0'){
+    for (let i = 0; i < board.length; i++) {
+      if (board[i][colId] === "X") {
+        numberOfX++;
+      } else if (board[i][colId] === "0") {
         numberOf0++;
-        console.log(numberOf0)
       }
     }
-    if (numberOf0 === board.length-1 || numberOfX === board.length-1)
-      setGameWon(true)
+    if (numberOf0 === board.length || numberOfX === board.length)
+      setGameWon(true);
   }
 
-  function CheckForWin(row:number, column:number) {
+  function CheckPrimaryDiagonal() {
+    let numberOfX = 0;
+    let numberOf0 = 0;
+    for (let i = 0; i < board.length; i++) {
+      if (board[i][i] === "X") {
+        numberOfX++;
+      } else if (board[i][i] === "0") {
+        numberOf0++;
+      }
+    }
+    if (numberOf0 === board.length || numberOfX === board.length)
+      setGameWon(true);
+  }
+
+  function CheckSecondaryDiagonal() {
+    let numberOfX = 0;
+    let numberOf0 = 0;
+    for (let i = 0; i < board.length; i++) {
+      if (board[i][board.length - 1 - i] === "X") {
+        numberOfX++;
+      } else if (board[i][board.length - 1 - i] === "0") {
+        numberOf0++;
+      }
+    }
+    if (numberOf0 === board.length || numberOfX === board.length)
+      setGameWon(true);
+  }
+
+  function CheckForWin(row: number, column: number) {
     CheckLine(row)
-    CheckColumn(column)
-    console.log(gameWon);
-    if(gameWon)
-      console.log("am castigaaaat")
+    CheckColumn(column);
+    CheckPrimaryDiagonal();
+    CheckSecondaryDiagonal();
   }
 
   function ResetGame() {
@@ -92,6 +110,7 @@ export default function Gameboard(props: { size: number }) {
       return newMatrix;
     });
     setPlayer(false);
+    setGameWon(false)
   }
 
   useEffect(() => {
@@ -99,20 +118,24 @@ export default function Gameboard(props: { size: number }) {
   }, []);
 
   useEffect(() => {
-    if (valuePos)
-      CheckForWin(valuePos?.[0], valuePos?.[1]);
+    if (valuePos) CheckForWin(valuePos?.[0], valuePos?.[1]);
   }, [valuePos]);
 
+  useEffect(()=>{
+    console.log("am castigaat")
+  }, [gameWon])
 
   return (
     <div className="w-screen flex flex-col justify-center items-center">
+      {gameWon? <p> You won!</p>: null}
       {board?.map((row, idR) => (
         <div key={idR} className="flex flex-row items-center justify-center">
           {row.map((item, idC) => (
             <Button
+              gameWon = {gameWon}
               key={idR.toString() + idC.toString()}
               value={item}
-              onClick={() => UpdateGame(idR, idC)}
+              onClick={() => AddValue(idR, idC)}
             />
           ))}
         </div>
