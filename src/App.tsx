@@ -5,7 +5,7 @@ import Gameboard from "./components/Gameboard";
 
 function App() {
   return (
-    <div className="App">
+    <div className="w-screen h-screen flex flex-col justify-evenly items-center">
       <h1
         className="text-lg text-slate-800 my-8
       sm:text-xl
@@ -17,12 +17,6 @@ function App() {
         Let's play tic-tac-toe!
       </h1>
       <Gameboard size={3} />
-      <button
-        className="bg-white py-4 px-6 rounded-md
-      hover:bg-slate-300 hover:font-medium "
-      >
-        Restart game
-      </button>
     </div>
   );
 }

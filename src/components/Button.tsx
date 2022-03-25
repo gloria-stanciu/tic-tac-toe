@@ -4,11 +4,11 @@ export default function Button(props: {
 }) {
   return (
     <button
-      className="w-20 aspect-square bg-slate-300 rounded-md m-1
-      sm:w-24
-      md:w-36
-      lg:w-40
-      xl:w-48
+      className="w-20 aspect-square bg-slate-300 rounded-md m-1 text-gray-800 font-semibold text-lg
+      sm:w-24 sm:text-xl
+      md:w-36 md:text-6xl
+      lg:w-40 lg:text-3xl
+      xl:w-48 xl:text-4xl
       "
       onClick={props.onClick}
     >
